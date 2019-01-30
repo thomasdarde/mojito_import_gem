@@ -36,7 +36,7 @@ module MojitoImport
       data = {additional_row_data: additional_row_data, import_scenario_identifier: self.import_scenario_identifier}
       # RestClient::Resource.new( , verify_ssl: false, log: Logger.new(STDOUT)).post "https://mojito-import.test/api/v1/new_import", data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
 
-      remote_endpoint_url = "https://mojito-import.test/api/v1/new_import"
+      remote_endpoint_url = "https://mojito-import.herokuapp.com/api/v1/new_import"
       RestClient::Resource.new( remote_endpoint_url, verify_ssl: false, log: Logger.new(STDOUT)).post data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
     end
   end
