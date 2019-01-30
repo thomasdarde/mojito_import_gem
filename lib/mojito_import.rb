@@ -28,7 +28,7 @@ module MojitoImport
       # pour le moment l'id n'est pas crypté ..
       # Il faut maintenant créer l'iframe correspondant en bougeant du code
 
-      "https://mojito-import.test/imports/#{import_id}/iframe?access_token=#{access_token}"
+      "https://mojito-import.herokuapp.com/imports/#{import_id}/iframe?access_token=#{access_token}"
     end
 
     def import_id
