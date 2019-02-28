@@ -37,7 +37,7 @@ module MojitoImport
       # pour le moment l'id n'est pas crypté ..
       # Il faut maintenant créer l'iframe correspondant en bougeant du code
 
-      "#{mojito_host}/imports/#{import_id}/iframe?access_token=#{access_token}"
+      "#{mojito_host}/imports/#{import_id}/iframe?access_token=#{access_token}&operator=#{operator}"
     end
 
     def import_id
