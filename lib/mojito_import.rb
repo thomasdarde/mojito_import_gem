@@ -2,12 +2,12 @@ require "mojito_import/version"
 require "rest-client"
 module MojitoImport
   class Importer
-    attr_accessor :import_scenario_identifier, :access_token, :project, :operator
+    attr_accessor :import_scenario_identifier, :access_token, :operator
     attr_accessor :additional_row_data, :button_name
     attr_accessor :mojito_host
 
     def self.create(import_scenario_identifier:  ,
-                    project: , operator: nil,
+                    operator: nil,
                     access_token: , additional_row_data: {},
                     button_name: "Upload your file",
                     mojito_host: "https://mojito-import.herokuapp.com")
@@ -17,7 +17,6 @@ module MojitoImport
       importer.button_name = button_name
       importer.mojito_host = mojito_host
       importer.import_scenario_identifier = import_scenario_identifier
-      importer.project = project
       importer.operator = operator
       importer
     end
@@ -42,7 +41,7 @@ module MojitoImport
 
     def import_id
       # ?access_token=#{access_token}&?import_scenario_identifier=sigilium-users
-      data = {additional_row_data: additional_row_data, import_scenario_identifier: self.import_scenario_identifier, project: self.project, operator: self.operator}
+      data = {additional_row_data: additional_row_data, import_scenario_identifier: self.import_scenario_identifier, operator: self.operator}
       # RestClient::Resource.new( , verify_ssl: false, log: Logger.new(STDOUT)).post "https://mojito-import.test/api/v1/new_import", data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
 
       remote_endpoint_url = "#{mojito_host}/api/v1/new_import"
