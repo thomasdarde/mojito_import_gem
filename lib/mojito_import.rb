@@ -32,7 +32,8 @@ if ((is_chrome) && (is_safari)) \{is_safari = false;\}
               if (!document.cookie.match(/^(.*;)?\s*fixed\s*=\s*[^;]+(.*)?$/)) \{
                   // Set cookie to maximum (https://stackoverflow.com/a/33106316/1502448)
                   document.cookie = 'fixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/';
-                  window.location.replace("#{mojito_host}/_safari_fix.html");
+                  var current_path = encodeURI(window.location);
+                  window.location.replace("#{mojito_host}/_safari_fix.html?return_path="+current_path);
                 \}
                 \}
                 </script>}
