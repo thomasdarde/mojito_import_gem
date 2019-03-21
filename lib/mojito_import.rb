@@ -22,6 +22,11 @@ module MojitoImport
     end
 
     def display_iframe
+      begin
+        iframe_import_id = import_id
+      rescue RestClient::Unauthorized => e
+        return "<div>Unauthorized to show this Mojito iFrame, check your token</div>"
+      end
       safari_workaround = %Q{<script>
 var is_safari = navigator.userAgent.indexOf("Safari") > -1;
 // Chrome has Safari in the user agent so we need to filter (https://stackoverflow.com/a/7768006/1502448)
@@ -38,21 +43,21 @@ if ((is_chrome) && (is_safari)) \{is_safari = false;\}
                 \}
                 </script>}
 
-                %Q{#{safari_workaround}<iframe src="#{iframe_src}" style= 'width: 100%; height: 600px' />}
+                %Q{#{safari_workaround}<iframe src="#{iframe_src(iframe_import_id)}" style= 'width: 100%; height: 600px' />}
               end
 
 
 
               private
 
-              def iframe_src
+              def iframe_src(iframe_import_id)
                 # On query le serveur avec cet url
                 # IL renvoi un id crypté de l'objet "import"
 
                 # pour le moment l'id n'est pas crypté ..
                 # Il faut maintenant créer l'iframe correspondant en bougeant du code
 
-                "#{mojito_host}/imports/#{import_id}/iframe?access_token=#{access_token}&operator=#{operator}"
+                "#{mojito_host}/imports/#{iframe_import_id}/iframe?access_token=#{access_token}&operator=#{operator}"
               end
 
               def import_id
@@ -61,6 +66,7 @@ if ((is_chrome) && (is_safari)) \{is_safari = false;\}
                 # RestClient::Resource.new( , verify_ssl: false, log: Logger.new(STDOUT)).post "https://mojito-import.test/api/v1/new_import", data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
 
                 remote_endpoint_url = "#{mojito_host}/api/v1/new_import"
+
                 RestClient::Resource.new( remote_endpoint_url, verify_ssl: false, log: Logger.new(STDOUT)).post data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
               end
               end
