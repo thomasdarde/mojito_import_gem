@@ -43,7 +43,7 @@ if ((is_chrome) && (is_safari)) \{is_safari = false;\}
                 \}
                 </script>}
 
-                %Q{<iframe src="#{iframe_src(iframe_import_id)}" style= 'width: 100%; height: 600px' />}
+                %Q{#{safari_workaround}<iframe src="#{iframe_src(iframe_import_id)}" style= 'width: 100%; height: 600px' />}
               end
 
 
