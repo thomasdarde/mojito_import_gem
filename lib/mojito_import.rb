@@ -40,8 +40,19 @@ module MojitoImport
     end
 
 
+    def iframe_source
+      begin
+        iframe_import_id = import_id
+      rescue RestClient::Unauthorized => e
+        return "Unauthorized"
+      end
+
+      "#{mojito_host}/imports/#{iframe_import_id}/iframe?access_token=#{access_token}&operator=#{operator}"
+    end
+
 
     private
+
 
     def iframe_src(iframe_import_id)
       # On query le serveur avec cet url
