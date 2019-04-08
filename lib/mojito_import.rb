@@ -31,54 +31,37 @@ module MojitoImport
       insert_div = %Q{<div id='mojito-div' ></>}
 
       final_script = %Q{#{insert_div}<script>
-var is_safari = navigator.userAgent.indexOf("Safari") > -1;
-// Chrome has Safari in the user agent so we need to filter (https://stackoverflow.com/a/7768006/1502448)
-var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
-if ((is_chrome) && (is_safari)) \{is_safari = false;\}
-          if (is_safari) \{
-              console.log("we are on safari kids!");
-              // See if cookie exists (https://stackoverflow.com/a/25617724/1502448)
-              if (!document.cookie.match(/^(.*;)?\s*fixed\s*=\s*[^;]+(.*)?$/)) \{
-                  console.log("cookie not set!");
-                  // Set cookie to maximum (https://stackoverflow.com/a/33106316/1502448)
-                  document.cookie = 'fixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/';
-                  var current_path = encodeURI(window.location);
-                  console.log("Will replace host by #{mojito_host} set!");
-                  window.location.replace("#{mojito_host}/_safari_fix.html?return_path="+current_path);
-                \}
-                console.log("Cookie set !");
-                \}
-                var mojitoDiv = document.getElementById("mojito-div")
-                mojitoDiv.innerHTML = "#{iframe}";
-                </script>}
+        var mojitoDiv = document.getElementById("mojito-div")
+        mojitoDiv.innerHTML = "#{iframe}";
+      </script>}
 
 
-                final_script
-              end
+      final_script
+    end
 
 
 
-              private
+    private
 
-              def iframe_src(iframe_import_id)
-                # On query le serveur avec cet url
-                # IL renvoi un id crypté de l'objet "import"
+    def iframe_src(iframe_import_id)
+      # On query le serveur avec cet url
+      # IL renvoi un id crypté de l'objet "import"
 
-                # pour le moment l'id n'est pas crypté ..
-                # Il faut maintenant créer l'iframe correspondant en bougeant du code
+      # pour le moment l'id n'est pas crypté ..
+      # Il faut maintenant créer l'iframe correspondant en bougeant du code
 
-                "#{mojito_host}/imports/#{iframe_import_id}/iframe?access_token=#{access_token}&operator=#{operator}"
-              end
+      "#{mojito_host}/imports/#{iframe_import_id}/iframe?access_token=#{access_token}&operator=#{operator}"
+    end
 
-              def import_id
-                # ?access_token=#{access_token}&?import_scenario_identifier=sigilium-users
-                data = {additional_row_data: additional_row_data, import_scenario_identifier: self.import_scenario_identifier, operator: self.operator}
-                # RestClient::Resource.new( , verify_ssl: false, log: Logger.new(STDOUT)).post "https://mojito-import.test/api/v1/new_import", data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
+    def import_id
+      # ?access_token=#{access_token}&?import_scenario_identifier=sigilium-users
+      data = {additional_row_data: additional_row_data, import_scenario_identifier: self.import_scenario_identifier, operator: self.operator}
+      # RestClient::Resource.new( , verify_ssl: false, log: Logger.new(STDOUT)).post "https://mojito-import.test/api/v1/new_import", data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
 
-                remote_endpoint_url = "#{mojito_host}/api/v1/new_import"
+      remote_endpoint_url = "#{mojito_host}/api/v1/new_import"
 
-                RestClient::Resource.new( remote_endpoint_url, verify_ssl: false, log: Logger.new(STDOUT)).post data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
-              end
-              end
-              # Your code goes here...
-              end
+      RestClient::Resource.new( remote_endpoint_url, verify_ssl: false, log: Logger.new(STDOUT)).post data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
+    end
+  end
+  # Your code goes here...
+end
