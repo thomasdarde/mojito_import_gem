@@ -27,23 +27,33 @@ module MojitoImport
       rescue RestClient::Unauthorized => e
         return "<div>Unauthorized to show this Mojito iFrame, check your token</div>"
       end
-      safari_workaround = %Q{<script>
+      iframe = %Q{<iframe src=\\"#{iframe_src(iframe_import_id)}\\" style= 'width: 100%; height: 600px' />}
+      insert_div = %Q{<div id='mojito-div' ></>}
+
+      final_script = %Q{#{insert_div}<script>
 var is_safari = navigator.userAgent.indexOf("Safari") > -1;
 // Chrome has Safari in the user agent so we need to filter (https://stackoverflow.com/a/7768006/1502448)
 var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
 if ((is_chrome) && (is_safari)) \{is_safari = false;\}
           if (is_safari) \{
+              console.log("we are on safari kids!");
               // See if cookie exists (https://stackoverflow.com/a/25617724/1502448)
               if (!document.cookie.match(/^(.*;)?\s*fixed\s*=\s*[^;]+(.*)?$/)) \{
+                  console.log("cookie not set!");
                   // Set cookie to maximum (https://stackoverflow.com/a/33106316/1502448)
                   document.cookie = 'fixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/';
                   var current_path = encodeURI(window.location);
+                  console.log("Will replace host by #{mojito_host} set!");
                   window.location.replace("#{mojito_host}/_safari_fix.html?return_path="+current_path);
                 \}
+                console.log("Cookie set !");
                 \}
+                var mojitoDiv = document.getElementById("mojito-div")
+                mojitoDiv.innerHTML = "#{iframe}";
                 </script>}
 
-                %Q{#{safari_workaround}<iframe src="#{iframe_src(iframe_import_id)}" style= 'width: 100%; height: 600px' />}
+
+                final_script
               end
 
 
