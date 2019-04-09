@@ -39,6 +39,9 @@ module MojitoImport
       final_script
     end
 
+    def script_source
+      "#{mojito_host}/mojito.js"
+    end
 
     def iframe_source
       begin
