@@ -10,34 +10,17 @@ module MojitoImport
                     operator: nil,
                     access_token: , additional_row_data: {},
                     button_name: "Upload your file",
-                    mojito_host: "https://mojito-import.herokuapp.com")
+                    mojito_manual_host: nil)
       importer = MojitoImport::Importer.new
       importer.access_token = access_token
       importer.additional_row_data = additional_row_data
       importer.button_name = button_name
-      importer.mojito_host = mojito_host
+      importer.mojito_host = mojito_manual_host || "https://script.mojito-import.com"
       importer.import_scenario_identifier = import_scenario_identifier
       importer.operator = operator
       importer
     end
 
-    def display_iframe
-      begin
-        iframe_import_id = import_id
-      rescue RestClient::Unauthorized => e
-        return "<div>Unauthorized to show this Mojito iFrame, check your token</div>"
-      end
-      iframe = %Q{<iframe src=\\"#{iframe_src(iframe_import_id)}\\" style= 'width: 100%; height: 600px' />}
-      insert_div = %Q{<div id='mojito-div' ></>}
-
-      final_script = %Q{#{insert_div}<script>
-        var mojitoDiv = document.getElementById("mojito-div")
-        mojitoDiv.innerHTML = "#{iframe}";
-      </script>}
-
-
-      final_script
-    end
 
     def script_source
       "#{mojito_host}/mojito.js"
