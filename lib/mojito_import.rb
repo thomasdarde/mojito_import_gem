@@ -1,4 +1,5 @@
 require "mojito_import/version"
+require "mojito_import/report"
 require "rest-client"
 module MojitoImport
   class Importer
