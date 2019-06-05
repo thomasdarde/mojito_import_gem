@@ -1,5 +1,3 @@
-
-require "rest-client"
 module MojitoImport
   class Report
 
