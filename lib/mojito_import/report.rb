@@ -13,7 +13,7 @@ module MojitoImport
       general_errors << error
     end
 
-    def add_data_updates(mojito_id, field, from, to: nil)
+    def add_data_update(mojito_id, field, from, to: nil)
       # reload!; report = MojitoImport::Report.new('1234'); report.add_data_error('123', 'name', 'your name sucks')
       hash_element =
         data_updates.detect { |error_hash| error_hash["mojitoId"] == mojito_id }
