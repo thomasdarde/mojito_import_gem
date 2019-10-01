@@ -22,13 +22,21 @@ RSpec.describe MojitoImport::Report do
     before do
       report.add_data_update('1234', 'name', 'before name value')
       report.add_data_update('7985', 'firstname', 'before firstname value', to: "")
-       report.add_data_update('7985', 'phone', 'before phone value', to: "after after value")
+      report.add_data_update('7985', 'phone', 'before phone value', to: "after after value")
     end
 
     it 'adds data updates' do
-      expect(report.data_updates).to eq([{"mojitoId"=>"1234", "name"=>{"before"=>"before name value"}}, {"firstname"=>{"after"=>"", "before"=>"before firstname value"},
-         "mojitoId"=>"7985",
-         "phone"=>[{"after"=>"after after value", "before"=>"before phone value"}]}])
+      expect(report.data_updates).to eq([
+        {
+          "mojitoId"=>"1234",
+          "name"=>{"before"=>"before name value"}
+        },
+        {
+          "mojitoId"=>"7985",
+          "firstname"=> { "after"=>"", "before"=>"before firstname value" },
+          "phone"=> { "after"=>"after after value", "before"=>"before phone value"}
+        }
+      ])
     end
 
   end

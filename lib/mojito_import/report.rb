@@ -25,8 +25,7 @@ module MojitoImport
         new_update_hash = { "mojitoId" => mojito_id, field => update_hash }
         data_updates << new_update_hash
       else
-        hash_element[field] ||= []
-        hash_element[field] << update_hash
+        hash_element[field] = update_hash
       end
     end
 
