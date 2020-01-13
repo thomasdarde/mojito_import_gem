@@ -55,7 +55,7 @@ module MojitoImport
       # RestClient::Resource.new( , verify_ssl: false, log: Logger.new(STDOUT)).post "https://mojito-import.test/api/v1/new_import", data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
 
       remote_endpoint_url = "#{mojito_host}/api/v1/new_import"
-
+      Rails.logger.debug { "will contact : #{remote_endpoint_url}"}
       RestClient::Resource.new( remote_endpoint_url, verify_ssl: false, log: Logger.new(STDOUT)).post data.to_json, {content_type: :json, accept: :json, :Authorization => "Bearer #{access_token}"}
     end
   end
