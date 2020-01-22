@@ -10,25 +10,50 @@ RSpec.describe MojitoImport::Report do
     end
 
     it 'generates a valid report' do
-      expect(report.to_json).to eq("{\"mojitoRequestId\":\"123\",\"requestErrors\":[\"The whole request creates an error\"]}")
+      expect(report.to_json).to eq(%Q{{"mojitoRequestId":"123","requestErrors":["The whole request creates an error"],"objectErrors":[]}})
     end
   end
 
-  describe ".add_data_error" do
+  describe ".add_object_error" do
     before do
-      report.add_data_error('1234', 'name', 'wrong name')
-      report.add_data_error('1234', 'name', 'banana name')
-      report.add_data_error('1234', 'website', 'WEBSITE BROKEN')
-      report.add_data_error('7985', 'name', 'NAME BROKEN')
+      report.add_object_error('1234', 'wrong name', field: 'name')
+      report.add_object_error('1234', 'banana name', field: 'name')
+      report.add_object_error('1234', 'WEBSITE BROKEN', field: 'website')
+      report.add_object_error('7985', 'NAME BROKEN', field: 'name')
+
     end
+
 
     it 'adds a data error' do
-      expect(report.data_errors).to eq([{"mojitoId" => "1234", "name" => ["wrong name", "banana name"], "website" => ["WEBSITE BROKEN"]}, {"mojitoId"=> "7985","name" => ["NAME BROKEN"]}])
+      expect(report.object_errors).to eq([{ "fields" => {"name" => ["wrong name", "banana name"],"website" => ["WEBSITE BROKEN"]}, "general"=>[], "mojitoObjectId" => "1234", }, {"mojitoObjectId"=> "7985", "general"=>[],"fields" => {"name" => ["NAME BROKEN"]}}])
+    end
+
+    it 'generates a valid report' do
+      expect(report.to_json).to eq(%Q{{"mojitoRequestId":"123","requestErrors":[],"objectErrors":[{"mojitoObjectId":"1234","general":[],"fields":{"name":["wrong name","banana name"],"website":["WEBSITE BROKEN"]}},{"mojitoObjectId":"7985","general":[],"fields":{"name":["NAME BROKEN"]}}]}})
+    end
+
+ describe ".general error" do
+    let(:report2) { MojitoImport::Report.new('12345') }
+
+    before do
+      report2.add_object_error('7985', 'general BROKEN')
+    end
+
+
+    it 'adds a data error' do
+      expect(report2.object_errors).to eq([ {"fields"=>{}, "general"=>["general BROKEN"], "mojitoObjectId"=>"7985"}])
+    end
+
+    it 'generates a valid report' do
+   #   puts report2.to_json
+      expect(report2.to_json).to eq(%Q{{"mojitoRequestId":"12345","requestErrors":[],"objectErrors":[{"mojitoObjectId":"7985","general":["general BROKEN"],"fields":{}}]}})
     end
 
   end
 
-  describe ".add_data_error" do
+  end
+
+  describe ".add_data_update" do
     before do
       report.add_data_update('1234', 'name', 'before name value')
       report.add_data_update('7985', 'firstname', 'before firstname value', to: "")
@@ -38,11 +63,11 @@ RSpec.describe MojitoImport::Report do
     it 'adds data updates' do
       expect(report.data_updates).to eq([
         {
-          "mojitoId"=>"1234",
+          "mojitoObjectId"=>"1234",
           "name"=>{"before"=>"before name value"}
         },
         {
-          "mojitoId"=>"7985",
+          "mojitoObjectId"=>"7985",
           "firstname"=> { "after"=>"", "before"=>"before firstname value" },
           "phone"=> { "after"=>"after after value", "before"=>"before phone value"}
         }
