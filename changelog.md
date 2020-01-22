@@ -1,3 +1,6 @@
+* MojitoImport 0.8.0
+  * new json schema !
+
 * MojitoImport 0.7.0
   * iFrame with token auth
 
