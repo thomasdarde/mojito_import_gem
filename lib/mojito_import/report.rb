@@ -2,20 +2,21 @@ require 'json'
 
 module MojitoImport
   class Report
-    attr_accessor :object_errors, :request_errors, :data_updates, :import_id
+    attr_accessor :object_errors, :request_errors, :object_updates, :import_id
 
     def initialize(import_id)
       self.import_id = import_id
       self.object_errors = []
       self.request_errors = []
-      self.data_updates = []
+      self.object_updates = []
     end
 
     def to_json
       {
         "mojitoRequestId" => self.import_id,
         "requestErrors" => self.request_errors,
-        "objectErrors" => self.object_errors
+        "objectErrors" => self.object_errors,
+        "objectUpdates" => self.object_updates
       }.to_json
     end
 
@@ -23,17 +24,17 @@ module MojitoImport
       request_errors << error
     end
 
-    def add_data_update(mojito_id, field, from, to: nil)
+    def add_object_update(mojito_id, field, from, to: nil)
 
       hash_element =
-        data_updates.detect { |error_hash| error_hash["mojitoObjectId"] == mojito_id }
+        object_updates.detect { |error_hash| error_hash["mojitoObjectId"] == mojito_id }
 
       update_hash = {"before" => from}
       update_hash["after"] = to unless to.nil?
 
       if hash_element.nil?
         new_update_hash = { "mojitoObjectId" => mojito_id, field => update_hash }
-        data_updates << new_update_hash
+        object_updates << new_update_hash
       else
         hash_element[field] = update_hash
       end

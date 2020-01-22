@@ -10,7 +10,7 @@ RSpec.describe MojitoImport::Report do
     end
 
     it 'generates a valid report' do
-      expect(report.to_json).to eq(%Q{{"mojitoRequestId":"123","requestErrors":["The whole request creates an error"],"objectErrors":[]}})
+      expect(report.to_json).to eq(%Q{{"mojitoRequestId":"123","requestErrors":["The whole request creates an error"],"objectErrors":[],"objectUpdates":[]}})
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe MojitoImport::Report do
     end
 
     it 'generates a valid report' do
-      expect(report.to_json).to eq(%Q{{"mojitoRequestId":"123","requestErrors":[],"objectErrors":[{"mojitoObjectId":"1234","general":[],"fields":{"name":["wrong name","banana name"],"website":["WEBSITE BROKEN"]}},{"mojitoObjectId":"7985","general":[],"fields":{"name":["NAME BROKEN"]}}]}})
+      expect(report.to_json).to eq(%Q{{"mojitoRequestId":"123","requestErrors":[],"objectErrors":[{"mojitoObjectId":"1234","general":[],"fields":{"name":["wrong name","banana name"],"website":["WEBSITE BROKEN"]}},{"mojitoObjectId":"7985","general":[],"fields":{"name":["NAME BROKEN"]}}],"objectUpdates":[]}})
     end
 
  describe ".general error" do
@@ -46,22 +46,22 @@ RSpec.describe MojitoImport::Report do
 
     it 'generates a valid report' do
    #   puts report2.to_json
-      expect(report2.to_json).to eq(%Q{{"mojitoRequestId":"12345","requestErrors":[],"objectErrors":[{"mojitoObjectId":"7985","general":["general BROKEN"],"fields":{}}]}})
+      expect(report2.to_json).to eq(%Q{{"mojitoRequestId":"12345","requestErrors":[],"objectErrors":[{"mojitoObjectId":"7985","general":["general BROKEN"],"fields":{}}],"objectUpdates":[]}})
     end
 
   end
 
   end
 
-  describe ".add_data_update" do
+  describe ".add_object_update" do
     before do
-      report.add_data_update('1234', 'name', 'before name value')
-      report.add_data_update('7985', 'firstname', 'before firstname value', to: "")
-      report.add_data_update('7985', 'phone', 'before phone value', to: "after after value")
+      report.add_object_update('1234', 'name', 'before name value')
+      report.add_object_update('7985', 'firstname', 'before firstname value', to: "")
+      report.add_object_update('7985', 'phone', 'before phone value', to: "after after value")
     end
 
     it 'adds data updates' do
-      expect(report.data_updates).to eq([
+      expect(report.object_updates).to eq([
         {
           "mojitoObjectId"=>"1234",
           "name"=>{"before"=>"before name value"}
