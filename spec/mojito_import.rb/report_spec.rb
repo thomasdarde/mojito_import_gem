@@ -4,6 +4,16 @@
 RSpec.describe MojitoImport::Report do
   let(:report) { MojitoImport::Report.new('123') }
 
+  describe ".add_request_error" do
+    before do
+      report.add_request_error('The whole request creates an error')
+    end
+
+    it 'generates a valid report' do
+      expect(report.to_json).to eq("{\"mojitoRequestId\":\"123\",\"requestErrors\":[\"The whole request creates an error\"]}")
+    end
+  end
+
   describe ".add_data_error" do
     before do
       report.add_data_error('1234', 'name', 'wrong name')

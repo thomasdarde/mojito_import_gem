@@ -1,16 +1,25 @@
+require 'json'
+
 module MojitoImport
   class Report
-    attr_accessor :data_errors, :general_errors, :data_updates, :import_id
+    attr_accessor :data_errors, :request_errors, :data_updates, :import_id
 
     def initialize(import_id)
       self.import_id = import_id
       self.data_errors = []
-      self.general_errors = []
+      self.request_errors = []
       self.data_updates = []
     end
 
-    def add_general_error(error)
-      general_errors << error
+    def to_json
+      {
+        "mojitoRequestId" => self.import_id,
+        "requestErrors" => self.request_errors
+      }.to_json
+    end
+
+    def add_request_error(error)
+      request_errors << error
     end
 
     def add_data_update(mojito_id, field, from, to: nil)
