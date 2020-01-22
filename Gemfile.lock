@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mojito_import (0.7.0)
+    mojito_import (0.8.0)
       rest-client (~> 2.0)
 
 GEM
