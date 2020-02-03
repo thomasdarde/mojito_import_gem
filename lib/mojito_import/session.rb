@@ -3,8 +3,8 @@ module MojitoImport
   class Session
 
 
-    def self.get_token(import_scenario_identifier, access_token, session_bucket, use_dev_host: false)
-      data = { import_scenario_identifier: import_scenario_identifier, session_bucket: session_bucket }
+    def self.get_token(import_scenario_identifier, access_token, session_bucket, operator_identifier: nil, history_group: nil, use_dev_host: false, force_new: false)
+      data = { import_scenario_identifier: import_scenario_identifier, session_bucket: session_bucket, operator_identifier: operator_identifier, history_group: history_group, force_new: force_new }
 
       mojito_host = use_dev_host ? 'http://www.mojito-import.test' : 'https://www.mojito-import.com'
 
