@@ -1,3 +1,7 @@
+* MojitoImport 0.9.0
+  * Add history group
+  * Add operator identifier
+
 * MojitoImport 0.8.0
   * new json schema !
 
