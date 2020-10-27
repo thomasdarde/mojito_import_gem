@@ -10,16 +10,29 @@ module MojitoImport
 
       request = RestClient::Resource.new(mojito_host, accept: :json,content_type: :json, Authorization: "Bearer #{access_token}", verify_ssl: false)
 
-      response = request["api/v1/import_session_token?access_token=#{access_token}"].post(data) { |response, request, result|
-        case response.code
-        when 200, 201
-          return JSON.parse(response)["token"]
-        when 500
-          return {"error when retrieving token" => response.body.inspect}
-        else
-          return JSON.parse(response)
-        end
-      }
+      begin
+        path = "api/v1/import_session_token?access_token=#{access_token}"
+        response = request[path].post(data, timeout: 5) { |response, request, result|
+          case response.code
+          when 200, 201
+            token =  JSON.parse(response)["token"]
+            if token.blank?
+              return {"error when retrieving token" => response.body.inspect}
+            else
+              return token
+            end
+          when 500
+            return {"error when retrieving token" => response.body.inspect}
+          else
+            return "Unexpected response code : #{response.code} #{response.body.inspect}"
+          end
+        }
+      rescue Net::ReadTimeout => e
+        return "error when retrieving token got a Timeout from the server."
+      rescue Exception => e
+        return "Unkown error : #{e}"
+      end
+
     end
 
 
