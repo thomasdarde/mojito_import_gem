@@ -1,3 +1,6 @@
+* MojitoImport 0.9.1
+  * Manage more errors
+
 * MojitoImport 0.9.0
   * Add history group
   * Add operator identifier
