@@ -64,7 +64,7 @@ GEM
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
     shellany (0.0.1)
-    thor (1.2.1)
+    thor (1.4.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8)
